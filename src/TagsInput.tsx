@@ -68,11 +68,11 @@ export default function TagsInput(props) {
             tabIndex={-1}
             label={item}
             onDelete={handleDelete(item)}
+            data-testid='email-tag'
           />
         ))
       }}
       {...other}
-      // onChange={e => handleChange(e)}
       onKeyDown={onKeyDown}
     />
   );
