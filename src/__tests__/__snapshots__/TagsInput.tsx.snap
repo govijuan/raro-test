@@ -3,17 +3,34 @@
 exports[`TagsInput Component cria o snapshot do component 1`] = `
 <DocumentFragment>
   <div
-    class="MuiFormControl-root MuiTextField-root"
+    class="MuiFormControl-root MuiTextField-root makeStyles-root-1"
   >
     <div
-      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedStart"
+      class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedStart MuiInputBase-adornedEnd"
     >
+      <div
+        class="tags-container"
+      />
       <input
         aria-invalid="false"
-        class="MuiInputBase-input MuiInput-input MuiInputBase-inputAdornedStart"
+        class="MuiInputBase-input MuiInput-input MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd"
         type="text"
         value=""
       />
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-text"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="MuiButton-label"
+        >
+          Send mailing list
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </button>
     </div>
   </div>
 </DocumentFragment>

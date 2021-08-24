@@ -64,8 +64,7 @@ function TagsInput(props) {
     <TextField
       InputProps={{
         startAdornment: 
-          (<React.Fragment>
-            <div className='tags-container'>
+          (<div className='tags-container'>
             { selectedItem.map((item) => (
               <Chip
                 key={item}
@@ -75,8 +74,7 @@ function TagsInput(props) {
                 data-testid='email-tag'
               />
             ))}
-            </div>
-          </React.Fragment>),
+          </div>),
         endAdornment: (
           <Button onClick={() => {
             onSendMailingList(selectedItem);
