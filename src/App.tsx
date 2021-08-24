@@ -18,7 +18,7 @@ const App: React.FC = () => {
         const response = getMailingListById(initMailingListId);
         setTags((await response).data.emails)
       } catch (error) {
-        console.log(error)
+        // Handle error
       }
     }
     getMails();
@@ -30,7 +30,7 @@ const App: React.FC = () => {
         const response = sendMailingList(initMailingListId, mailingList)
         setTags((await response).data.emails)
       } catch (error) {
-        console.log(error)
+        // Handle error
       }
     }
   }

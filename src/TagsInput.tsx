@@ -23,7 +23,6 @@ function TagsInput(props) {
         e.target.value = '';
         break;
       case 'Backspace':
-        console.log("Backspace presionado!");
         handleBackspace(e);
         break;
       default:
@@ -40,7 +39,6 @@ function TagsInput(props) {
                                                     && validateEmail(item) 
                                                     && !selectedItem.includes(item)
                                                 );
-      console.log("Split result: ", emailsForAdding);
     }else{
       if(validateEmail(value) && !selectedItem.includes(value)) emailsForAdding.push(value)
     }
