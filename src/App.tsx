@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TagsInput from './TagsInput';
 
-import {getMailingListById} from './services';
+import {getMailingListById, sendMailingList} from './services';
 
 const App: React.FC = () => {
   function handleSelecetedTags(items: string[]) {
@@ -24,10 +24,22 @@ const App: React.FC = () => {
     getMails();
   }, []);
 
+  const handleSendMailingList = async (mailingList : any[]) => {
+    if(mailingList.length !== 0){
+      try {
+        const response = sendMailingList(initMailingListId, mailingList)
+        setTags((await response).data.emails)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
   return (
     <div className="App">
       <TagsInput
         onSelectTags={handleSelecetedTags}
+        onSendMailingList={handleSendMailingList}
         fullWidth
         variant="outlined"
         id="tags"
