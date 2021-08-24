@@ -18,57 +18,50 @@ describe('TagsInput Component', () => {
 
     debug()
   })
-
-  const processKeyboardEvents = () => {
-
+  const emailsArray = ['contato@rarolabs.com.br', 'nao-responda@rarolabs.com.br']
+  const processKeyboardEvents = (keyboardEvt: string, emailsArr: any[]) => {
+    render(<TagsInput placeholder='add Tags' tags={ keyboardEvt === 'Backspace' ? emailsArr : [] }/>)
+    const input = screen.getByPlaceholderText('add Tags');
+    if(keyboardEvt === 'Enter' || keyboardEvt === 'Tab') { 
+      const inputValue = emailsArr.join(';')
+      fireEvent.change(input, { target: { value:  inputValue} }) 
+    }
+    fireEvent.keyDown(input, { key: keyboardEvt, code: keyboardEvt })
+    const inputTags = screen.getAllByTestId('email-tag')
+    let expectedLength = 0
+    switch(keyboardEvt) {
+      case 'Enter':
+      case 'Tab':
+        expectedLength = emailsArr.length
+        break;
+      case 'Backspace':
+        expectedLength = emailsArr.length - 1
+        break;
+    }
+    expect(inputTags.length).toBe(expectedLength)
+    const tagTexts = inputTags.map( tag => {
+      const tagSpan = within(tag).getByText((content, element) =>{
+        return element.tagName.toLocaleLowerCase() === 'span'
+      })
+      return tagSpan.textContent.toString()
+    })
+    if(keyboardEvt === 'Backspace'){
+      expect(emailsArr).not.toEqual(tagTexts)
+      expect(emailsArr).toEqual(expect.arrayContaining(tagTexts))
+    } else {
+      expect(emailsArr).toEqual(tagTexts)
+    }
   }
 
   it('deve renderizar tags quando preencher o input e pressionar enter', () => {
-    render(<TagsInput placeholder='add Tags'/>)
-    const input = screen.getByPlaceholderText('add Tags');
-    fireEvent.change(input, {target: {value: 'contato@rarolabs.com.br;nao-responda@rarolabs.com.br'}})
-    fireEvent.keyDown(input, {key: 'Enter', code: 'Enter'})
-    const inputTags = screen.getAllByTestId('email-tag')
-    expect(inputTags.length).toBe(2)
-    const tagTexts = inputTags.map( tag => {
-      const tagSpan = within(tag).getByText((content, element) =>{
-        return element.tagName.toLocaleLowerCase() === 'span'
-      })
-      return tagSpan.textContent.toString()
-    })
-    expect([ 'contato@rarolabs.com.br', 'nao-responda@rarolabs.com.br' ]).toEqual(tagTexts)
+    processKeyboardEvents('Enter', emailsArray)
   })
 
   it('deve renderizar tags quando preencher o input e pressionar tab', () => {
-    render(<TagsInput placeholder='add Tags'/>)
-    const input = screen.getByPlaceholderText('add Tags');
-    fireEvent.change(input, {target: {value: 'contato@rarolabs.com.br;nao-responda@rarolabs.com.br'}})
-    fireEvent.keyDown(input, {key: 'Tab', code: 'Tab'})
-    const inputTags = screen.getAllByTestId('email-tag')
-    expect(inputTags.length).toBe(2)
-    const tagTexts = inputTags.map( tag => {
-      const tagSpan = within(tag).getByText((content, element) =>{
-        return element.tagName.toLocaleLowerCase() === 'span'
-      })
-      return tagSpan.textContent.toString()
-    })
-    expect([ 'contato@rarolabs.com.br', 'nao-responda@rarolabs.com.br' ]).toEqual(tagTexts)
+    processKeyboardEvents('Tab', emailsArray)
   })
 
   it('deve deletar a útima tag criada ao pressionar o botão de backspace', async () => {
-    const emails = ['contato@rarolabs.com.br', 'nao-responda@rarolabs.com.br']
-    render(<TagsInput placeholder='add Tags' tags={emails}/>)
-    const input = screen.getByPlaceholderText('add Tags');
-    fireEvent.keyDown(input, {key: 'Backspace', code: 'Backspace'})
-    const inputTags = screen.getAllByTestId('email-tag')
-    expect(inputTags.length).toBe(1)
-    const tagTexts = inputTags.map( tag => {
-      const tagSpan = within(tag).getByText((content, element) =>{
-        return element.tagName.toLocaleLowerCase() === 'span'
-      })
-      return tagSpan.textContent.toString()
-    })
-    expect(emails).toEqual(expect.not.arrayContaining(tagTexts))
-    // teste não implementado.
+    processKeyboardEvents('Backspace', emailsArray )
   })
 })
