@@ -1,10 +1,43 @@
 import React, { useEffect } from "react";
-import Chip from "@material-ui/core/Chip";
-import TextField from "@material-ui/core/TextField";
+import {TextField, Chip, Button } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 
-import {validateEmail} from './helpers'
+import {validateEmail} from './helpers';
 
-export default function TagsInput(props) {
+const useStyles = makeStyles(() => ({
+  root: {
+    '& > div': {
+      padding: '10px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      '& .tags-container': {
+        '& > div': {
+          margin: '2px',
+        },
+      },
+      '& button': {
+        background: 'linear-gradient(355deg, rgba(19,121,9,1) 0%, rgba(64,179,147,1) 49%, rgba(0,212,255,1) 100%)',
+        marginTop: '10px',
+        color: '#fff',
+        '& :hover, :active': {
+          //boxShadow: '2px 2px 15px 5px rgba(64,179,147,1)'
+          color: '#333'
+        }
+      },
+      '& input': {
+        padding: '0',
+        height: '30px',
+        marginBottom: '10px',
+        borderBottom: '1px solid #333'
+      }
+    }
+  },
+  notchedOutline: {},
+  disabled: {},
+}));
+
+function TagsInput(props) {
   const { onSelectTags, tags, ...other } = props;
   const [ selectedItem, setSelectedItem ] = React.useState([]);
 
@@ -13,7 +46,7 @@ export default function TagsInput(props) {
     setSelectedItem(tags);
   }, [tags]);
 
-  const onKeyDown = e => {
+  const onKeyDown = (e: any) => {
     const key = e.code;
     switch(key){
       case 'Tab':
@@ -30,7 +63,7 @@ export default function TagsInput(props) {
     }
   }
 
-  const processTags = e => {
+  const processTags = (e: any) => {
     const value = e.target.value;
     let emailsForAdding=[]
     if(value.includes(';')){
@@ -48,13 +81,13 @@ export default function TagsInput(props) {
     }
   };
 
-  const handleBackspace = (e) => {
+  const handleBackspace = (e: any) => {
     const newSelectedItem = [...selectedItem];
     newSelectedItem.pop();
     setSelectedItem(newSelectedItem);
   }
 
-  const handleDelete = (item) => () => {
+  const handleDelete = (item: any) => () => {
     const newTags = selectedItem.filter( setItem => setItem !== item);
     setSelectedItem(newTags);
   };
@@ -62,15 +95,21 @@ export default function TagsInput(props) {
   return (
     <TextField
       InputProps={{
-        startAdornment: selectedItem.map((item) => (
-          <Chip
-            key={item}
-            tabIndex={-1}
-            label={item}
-            onDelete={handleDelete(item)}
-            data-testid='email-tag'
-          />
-        ))
+        endAdornment: 
+          (<React.Fragment>
+            <div className='tags-container'>
+            { selectedItem.map((item) => (
+              <Chip
+                key={item}
+                tabIndex={-1}
+                label={item}
+                onDelete={handleDelete(item)}
+                data-testid='email-tag'
+              />
+            ))}
+            </div>
+            <Button>Send mailing list</Button>
+          </React.Fragment>)
       }}
       {...other}
       onKeyDown={onKeyDown}
@@ -80,3 +119,8 @@ export default function TagsInput(props) {
 TagsInput.defaultProps = {
   tags: []
 };
+
+export default function Hook(props) {
+  const classes = useStyles();
+  return <TagsInput className={classes.root} {...props}/>
+}

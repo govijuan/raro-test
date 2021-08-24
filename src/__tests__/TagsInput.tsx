@@ -6,19 +6,8 @@ describe('TagsInput Component', () => {
   afterEach(jest.clearAllMocks)
   afterEach(cleanup)
 
-  it('cria o snapshot do component', () => {
-    const container = render(<TagsInput />)
-    expect(container.asFragment()).toMatchSnapshot()
-  })
-
-  it('deve renderizar as tags enviadas por atributos', () => {
-    const emails = ['contato@rarolabs.com.br', 'nao-responda@rarolabs.com.br']
-
-    const { debug } = render(<TagsInput tags={emails} />)
-
-    debug()
-  })
   const emailsArray = ['contato@rarolabs.com.br', 'nao-responda@rarolabs.com.br']
+
   const processKeyboardEvents = (keyboardEvt: string, emailsArr: any[]) => {
     render(<TagsInput placeholder='add Tags' tags={ keyboardEvt === 'Backspace' ? emailsArr : [] }/>)
     const input = screen.getByPlaceholderText('add Tags');
@@ -52,6 +41,19 @@ describe('TagsInput Component', () => {
       expect(emailsArr).toEqual(tagTexts)
     }
   }
+
+  it('cria o snapshot do component', () => {
+    const container = render(<TagsInput />)
+    expect(container.asFragment()).toMatchSnapshot()
+  })
+
+  it('deve renderizar as tags enviadas por atributos', () => {
+    const emails = ['contato@rarolabs.com.br', 'nao-responda@rarolabs.com.br']
+
+    const { debug } = render(<TagsInput tags={emails} />)
+
+    debug()
+  })
 
   it('deve renderizar tags quando preencher o input e pressionar enter', () => {
     processKeyboardEvents('Enter', emailsArray)
